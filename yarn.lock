@@ -155,6 +155,11 @@
   resolved "https://registry.npmmirror.com/@types/node/-/node-16.18.98.tgz#3554bb7911ea2bbc3a528be0776d6ab16b7674d2"
   integrity sha512-fpiC20NvLpTLAzo3oVBKIqBGR6Fx/8oAK/SSf7G+fydnXMY1x4x9RZ6sBXhqKlCU21g2QapUsbLlhv3+a7wS+Q==
 
+"@types/obsidian-typing@npm:obsidian-typings":
+  version "1.1.6"
+  resolved "https://registry.npmmirror.com/obsidian-typings/-/obsidian-typings-1.1.6.tgz#c650219230aa98b7173b4e0e199f9d8946d48d7a"
+  integrity sha512-p3iWfvHDJfrwdYKAhb8adlBVOGtGteEy5nE7Jzhb8K5nyrTb5DvOtG+BQGneVM7Ou6UMkZnRoOLPkhJMXLquGw==
+
 "@types/tern@*":
   version "0.23.9"
   resolved "https://registry.npmmirror.com/@types/tern/-/tern-0.23.9.tgz#6f6093a4a9af3e6bb8dde528e024924d196b367c"
@@ -437,7 +442,7 @@ ms@2.1.2:
   resolved "https://registry.npmmirror.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-obsidian@latest:
+obsidian@^1.5.7-1:
   version "1.5.7-1"
   resolved "https://registry.npmmirror.com/obsidian/-/obsidian-1.5.7-1.tgz#6e367f015f6a1b6b13204135434bbe3c04d4dfc3"
   integrity sha512-T5ZRuQ1FnfXqEoakTTHVDYvzUEEoT8zSPnQCW31PVgYwG4D4tZCQfKHN2hTz1ifnCe8upvwa6mBTAP2WUA5Vng==
