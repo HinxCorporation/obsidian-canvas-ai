@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, CanvasNode, Editor, MarkdownView, Menu, MenuItem, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
 // Remember to rename these classes and interfaces!
 
@@ -74,6 +74,22 @@ export default class CanvasAiPlugin extends Plugin {
 			console.log('click', evt);
 		});
 
+		const workspace = this.app.workspace
+
+		// 注册一个事件监听器，当用户在canvas上点击右键菜单时，多加一个菜单项
+		this.registerEvent(
+			workspace.on('canvas:node-menu', (menu: Menu, canvas: CanvasNode) => {
+				console.log('canvas:node-menu');
+				menu.addItem((item: MenuItem) => {
+					item.setTitle('提交到Ai');
+					item.onClick(() => {
+						// TODO 提交prompt到ai服务
+						new Notice('触发Ai事件');
+					});
+				});
+			})
+		);
+
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
@@ -97,12 +113,12 @@ class CanvasAiModal extends Modal {
 	}
 
 	onOpen() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.setText('Woah!');
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 }
@@ -116,7 +132,7 @@ class CanvasAiSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 
 		containerEl.empty();
 
