@@ -3,11 +3,11 @@ import { App, CanvasNode, Editor, MarkdownView, Menu, MenuItem, Modal, Notice, P
 // Remember to rename these classes and interfaces!
 
 interface CanvasAiPluginSettings {
-	canvasAiSetting: string;
+	apiKey: string;
 }
 
 const DEFAULT_SETTINGS: CanvasAiPluginSettings = {
-	canvasAiSetting: 'default'
+	apiKey: ''
 }
 
 export default class CanvasAiPlugin extends Plugin {
@@ -137,13 +137,13 @@ class CanvasAiSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('Setting #1')
+			.setName('API keys')
 			.setDesc('It\'s a secret')
 			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.canvasAiSetting)
+				.setPlaceholder('Enter your API keys')
+				.setValue(this.plugin.settings.apiKey)
 				.onChange(async (value) => {
-					this.plugin.settings.canvasAiSetting = value;
+					this.plugin.settings.apiKey = value;
 					await this.plugin.saveSettings();
 				}));
 	}
