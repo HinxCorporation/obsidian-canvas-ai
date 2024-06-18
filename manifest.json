@@ -6,6 +6,6 @@
 	"description": "Obsidian Canvas AI Plugin.",
 	"author": "Hinx Corporation",
 	"authorUrl": "https://github.com/HinxCorporation",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"fundingUrl": "https://github.com/HinxCorporation/obsidian-canvas-ai",
 	"isDesktopOnly": false
 }
