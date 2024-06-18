@@ -1,21 +1,14 @@
-import { App, CanvasNode, Editor, MarkdownView, Menu, MenuItem, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-
-// Remember to rename these classes and interfaces!
-
-interface CanvasAiPluginSettings {
-	apiKey: string;
-}
-
-const DEFAULT_SETTINGS: CanvasAiPluginSettings = {
-	apiKey: ''
-}
+import { createRequest } from 'chat';
+import { App, CanvasNode, Editor, MarkdownView, Menu, MenuItem, Modal, Notice, Plugin } from 'obsidian';
+import SettingsManager from 'settings';
 
 export default class CanvasAiPlugin extends Plugin {
-	settings: CanvasAiPluginSettings;
+	settings: SettingsManager;
 
 	async onload() {
-		await this.loadSettings();
-
+		this.settings = new SettingsManager(this);
+		await this.settings.loadSettings();
+		this.settings.addSettingsTab();
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
@@ -65,9 +58,6 @@ export default class CanvasAiPlugin extends Plugin {
 			}
 		});
 
-		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new CanvasAiSettingTab(this.app, this));
-
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
 		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
@@ -78,15 +68,34 @@ export default class CanvasAiPlugin extends Plugin {
 
 		// 注册一个事件监听器，当用户在canvas上点击右键菜单时，多加一个菜单项
 		this.registerEvent(
-			workspace.on('canvas:node-menu', (menu: Menu, canvas: CanvasNode) => {
-				console.log('canvas:node-menu');
+			workspace.on('canvas:node-menu', (menu: Menu, node: CanvasNode) => {
+				console.log('触发事件 - canvas:node-menu');
 				menu.addItem((item: MenuItem) => {
 					item.setTitle('提交到Ai');
-					item.onClick(() => {
-						// TODO 提交prompt到ai服务
-						new Notice('触发Ai事件');
+					item.onClick(async () => {
+						// 提交prompt到ai服务，获取返回json数据
+						createRequest(this.settings.getSetting('apiKey'),node.text)
+							.then(resData => {
+								// 初始的高度
+								let height = node.height;
+								let y = node.y + height + 10;
+								console.log("node",node);
+								console.log("choices", resData.choices);
+								resData.choices.forEach((choice: unknown) => {
+									node.canvas.createTextNode({
+										pos: { x: node.x, y },
+										text: choice.message.content,
+										size: { width: node.width, height },
+										focus: false,
+									})
+								})
+							})
+							.catch(error => {
+								// 处理错误
+								console.error(error);
+							})
 					});
-				});
+				})
 			})
 		);
 
@@ -96,14 +105,6 @@ export default class CanvasAiPlugin extends Plugin {
 
 	onunload() {
 
-	}
-
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings);
 	}
 }
 
@@ -120,31 +121,5 @@ class CanvasAiModal extends Modal {
 	onClose() {
 		const { contentEl } = this;
 		contentEl.empty();
-	}
-}
-
-class CanvasAiSettingTab extends PluginSettingTab {
-	plugin: CanvasAiPlugin;
-
-	constructor(app: App, plugin: CanvasAiPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-
-	display(): void {
-		const { containerEl } = this;
-
-		containerEl.empty();
-
-		new Setting(containerEl)
-			.setName('API keys')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your API keys')
-				.setValue(this.plugin.settings.apiKey)
-				.onChange(async (value) => {
-					this.plugin.settings.apiKey = value;
-					await this.plugin.saveSettings();
-				}));
 	}
 }
