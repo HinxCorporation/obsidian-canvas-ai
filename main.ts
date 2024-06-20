@@ -1,4 +1,5 @@
 import { createRequest } from 'chat';
+import { randomInt, randomUUID } from 'crypto';
 import { App, CanvasNode, Editor, MarkdownView, Menu, MenuItem, Modal, Notice, Plugin } from 'obsidian';
 import SettingsManager from 'settings';
 
@@ -73,27 +74,56 @@ export default class CanvasAiPlugin extends Plugin {
 				menu.addItem((item: MenuItem) => {
 					item.setTitle('提交到Ai');
 					item.onClick(async () => {
+						// 创建textNode
+						let height = node.height;
+						let y = node.y + height + 30;
+						const newTextNode = node.canvas.createTextNode({
+							pos: { x: node.x, y },
+							text: "Loading...",
+							size: { width: node.width, height },
+							focus: false,
+						})
+						// console.log("node", node)
+						// console.log("newTextNode", newTextNode);
+
+						// 创建连接线
+						const edge = {
+							id: randomUUID.toString().replace("-", "").substring(0, 16),
+							fromSide: "bottom",
+							fromNode: node.id,
+							toSide: "top",
+							toNode: newTextNode.id,
+						}
+
+						const canvasData = node.canvas.getData();
+						canvasData.edges.push(edge);
+						node.canvas.setData(canvasData);
+
+						let text = "";
 						// 提交prompt到ai服务，获取返回json数据
-						createRequest(this.settings.getSetting('apiKey'),node.text)
-							.then(resData => {
-								// 初始的高度
-								let height = node.height;
-								let y = node.y + height + 10;
-								console.log("node",node);
-								console.log("choices", resData.choices);
-								resData.choices.forEach((choice: unknown) => {
-									node.canvas.createTextNode({
-										pos: { x: node.x, y },
-										text: choice.message.content,
-										size: { width: node.width, height },
-										focus: false,
-									})
-								})
-							})
-							.catch(error => {
-								// 处理错误
-								console.error(error);
-							})
+						createRequest(this.settings.getSetting('apiKey'), node.text, (message) => {
+							if (message === '[DONE]') {
+								return;
+							}
+
+							// 返回的token
+							const token = JSON.parse(message).choices[0].delta.content;
+							console.log(token);
+							text += (token);
+							newTextNode.setText(text);
+
+							// 获取newTextNode的Data
+							let newTextNodeData = newTextNode.getData();
+							// 获取newTextNode的高度
+							let oldHeight = newTextNodeData.height;
+							// 获取文本高度（包括不可见高度）
+							let height = newTextNode.contentEl.firstChild.firstChild.scrollHeight;
+							if (oldHeight < height) {
+								newTextNodeData.height = height;
+								// 更新textNode的高度
+								newTextNode.setData(newTextNodeData);
+							}
+						});
 					});
 				})
 			})
