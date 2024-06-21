@@ -103,6 +103,10 @@ export default class CanvasAiPlugin extends Plugin {
 						// 提交prompt到ai服务，获取返回json数据
 						createRequest(this.settings.getSetting('apiKey'), node.text, (message) => {
 							if (message === '[DONE]') {
+								let newTextNodeData = newTextNode.getData();
+								newTextNodeData.height += 10;
+								// 更新textNode的高度
+								newTextNode.setData(newTextNodeData);
 								return;
 							}
 
