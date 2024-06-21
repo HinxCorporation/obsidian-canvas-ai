@@ -1,13 +1,13 @@
 # Obsidian Canvas AI
 
 <p align=center>
-Obsidian Canvas AI Plugin
+Obsidian 画板 AI 插件
 </p>
 
 <br>
 
 <p align=center>
-<b>English</b> • <a href="https://github.com/HinxCorporation/obsidian-canvas-ai/blob/master/README-zh.md">简体中文</a>
+<a href="https://github.com/HinxCorporation/obsidian-canvas-ai#obsidian-canvas-ai">English</a> • <b>简体中文</b>
 </p>
 
 <br>
