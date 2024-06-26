@@ -37,7 +37,7 @@ Obsidian Canvas AI Plugin
 
 ### 2. Download from Release
 
-- Download the latest version from the releases
+- Download the latest version from the [releases](https://github.com/HinxCorporation/obsidian-canvas-ai/releases/tag/0.1.0)
 - Extract the three files (main.js, manifest.json, styles.css) and place them in the folder `{{obsidian_vault}}/.obsidian/plugins/obsidian-canvas-ai`
 
 ## Usage

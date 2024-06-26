@@ -37,7 +37,7 @@ Obsidian 画板 AI 插件
 
 ### 2. 从Release中下载
 
-- 从release中下载最新版本
+- 从[releases](https://github.com/HinxCorporation/obsidian-canvas-ai/releases/tag/0.1.0)中下载最新版本
 - 将三个文件（main.js、manifest.json、styles.css）解压并放置在文件夹 `{{obsidian_vault}}/.obsidian/plugins/obsidian-canvas-ai`中
 
 ## 如何使用
