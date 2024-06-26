@@ -1,12 +1,20 @@
 import CanvasAiPlugin from "main";
 import { PluginSettingTab, App, Setting } from "obsidian";
 
+const LARGE_LANGUAGE_MODELS = {
+  'deepseek-chat': 'deepseek-chat',
+  'deepseek-coder': 'deepseek-coder'
+}
+
 export interface CanvasAiPluginSettings {
-  apiKey: string;
+  apiKey: string
+  llm: string
 }
 
 export const DEFAULT_SETTINGS: Partial<CanvasAiPluginSettings> = {
-  apiKey: ''
+  apiKey: '',
+  llm: Object.keys(LARGE_LANGUAGE_MODELS).first()
+
 }
 
 export class CanvasAiSettingTab extends PluginSettingTab {
@@ -30,6 +38,16 @@ export class CanvasAiSettingTab extends PluginSettingTab {
         .onChange(async (value) => {
           await this.settingsManager.setSetting({ apiKey: value });
         }));
+
+    new Setting(containerEl)
+      .setName('Large language model')
+      .setDesc('Choose a model')
+      .addDropdown((dropdown) => {
+        dropdown
+          .addOptions(LARGE_LANGUAGE_MODELS)
+          .setValue(this.settingsManager.getSetting("llm"))
+          .onChange(async (value) => await this.settingsManager.setSetting({ llm: value }))
+      })
   }
 }
 
@@ -62,7 +80,7 @@ export default class SettingsManager {
     this.plugin.app.workspace.trigger(SettingsManager.SETTINGS_CHANGED_EVENT)
   }
 
-	// This adds a settings tab so the user can configure various aspects of the plugin
+  // This adds a settings tab so the user can configure various aspects of the plugin
   addSettingsTab() {
     this.settingsTab = new CanvasAiSettingTab(this.plugin, this)
     this.plugin.addSettingTab(this.settingsTab)
