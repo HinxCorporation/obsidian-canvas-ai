@@ -1,5 +1,6 @@
 import CanvasAiPlugin from "main";
 import { randomUUID } from 'crypto';
+import { CanvasNode, Menu, MenuItem } from 'obsidian';
 
 interface requestData {
   messages: { content: string; role: string }[];
@@ -55,7 +56,7 @@ export default class ChatCanvasExtension {
 
             let text = "";
             // 提交prompt到ai服务，获取返回json数据
-            this.createRequest(node.text, (message) => {
+            this.createRequest(node.text, (message: string) => {
               if (message === '[DONE]') {
                 let newTextNodeData = newTextNode.getData();
                 newTextNodeData.height += 10;
@@ -94,8 +95,13 @@ export default class ChatCanvasExtension {
       role: "user"
     }
 
+    const customInstructions = {
+      content: this.plugin.settings.getSetting('customInstructions'),
+      role: "system"
+    }
+
     let data: requestData = {
-      messages: [],
+      messages: [customInstructions],
       model: this.plugin.settings.getSetting('llm'),
       frequency_penalty: 0,
       max_tokens: 2048,

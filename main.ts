@@ -1,5 +1,5 @@
 import ChatCanvasExtension from 'chat';
-import { App, CanvasNode, Editor, MarkdownView, Menu, MenuItem, Modal, Notice, Plugin } from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, Plugin } from 'obsidian';
 import SettingsManager from 'settings';
 
 const CANVAS_EXTENSIONS: any[] = [

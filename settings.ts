@@ -7,8 +7,9 @@ const LARGE_LANGUAGE_MODELS = {
 }
 
 export interface CanvasAiPluginSettings {
-  apiKey: string
-  llm: string
+  apiKey: string;
+  llm: string;
+  customInstructions: string;
 }
 
 export const DEFAULT_SETTINGS: Partial<CanvasAiPluginSettings> = {
@@ -29,6 +30,7 @@ export class CanvasAiSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
+    // API key输入框
     new Setting(containerEl)
       .setName('API keys')
       .setDesc('It\'s a secret')
@@ -39,6 +41,7 @@ export class CanvasAiSettingTab extends PluginSettingTab {
           await this.settingsManager.setSetting({ apiKey: value });
         }));
 
+    // 大语言模型选择框
     new Setting(containerEl)
       .setName('Large language model')
       .setDesc('Choose a model')
@@ -48,6 +51,18 @@ export class CanvasAiSettingTab extends PluginSettingTab {
           .setValue(this.settingsManager.getSetting("llm"))
           .onChange(async (value) => await this.settingsManager.setSetting({ llm: value }))
       })
+
+    // 个性化指令
+    new Setting(containerEl)
+      .setName('Custom instructions')
+      .setDesc('Instructions to the AI')
+      .addTextArea(text => text
+        .setPlaceholder('Enter your custom instructions')
+        .setValue(this.settingsManager.getSetting('customInstructions'))
+        .onChange(async (value) => {
+          console.log(text);
+          await this.settingsManager.setSetting({ customInstructions: value });
+        }));
   }
 }
 
