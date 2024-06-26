@@ -1,15 +1,23 @@
-import { createRequest } from 'chat';
-import { randomInt, randomUUID } from 'crypto';
+import ChatCanvasExtension from 'chat';
 import { App, CanvasNode, Editor, MarkdownView, Menu, MenuItem, Modal, Notice, Plugin } from 'obsidian';
 import SettingsManager from 'settings';
 
+const CANVAS_EXTENSIONS: any[] = [
+	ChatCanvasExtension
+]
+
 export default class CanvasAiPlugin extends Plugin {
 	settings: SettingsManager;
+
+	canvasExtensions: any[]
 
 	async onload() {
 		this.settings = new SettingsManager(this);
 		await this.settings.loadSettings();
 		this.settings.addSettingsTab();
+
+		this.canvasExtensions = CANVAS_EXTENSIONS.map((Extension) => new Extension(this));
+
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
@@ -66,72 +74,6 @@ export default class CanvasAiPlugin extends Plugin {
 		});
 
 		const workspace = this.app.workspace
-
-		// 注册一个事件监听器，当用户在canvas上点击右键菜单时，多加一个菜单项
-		this.registerEvent(
-			workspace.on('canvas:node-menu', (menu: Menu, node: CanvasNode) => {
-				console.log('触发事件 - canvas:node-menu');
-				menu.addItem((item: MenuItem) => {
-					item.setTitle('提交到Ai');
-					item.onClick(async () => {
-						// 创建textNode
-						let height = node.height;
-						let y = node.y + height + 30;
-						const newTextNode = node.canvas.createTextNode({
-							pos: { x: node.x, y },
-							text: "Loading...",
-							size: { width: node.width, height },
-							focus: false,
-						})
-						// console.log("node", node)
-						// console.log("newTextNode", newTextNode);
-
-						// 创建连接线
-						const edge = {
-							id: randomUUID.toString().replace("-", "").substring(0, 16),
-							fromSide: "bottom",
-							fromNode: node.id,
-							toSide: "top",
-							toNode: newTextNode.id,
-						}
-
-						const canvasData = node.canvas.getData();
-						canvasData.edges.push(edge);
-						node.canvas.setData(canvasData);
-
-						let text = "";
-						// 提交prompt到ai服务，获取返回json数据
-						createRequest(this.settings.getSetting('apiKey'), node.text, (message) => {
-							if (message === '[DONE]') {
-								let newTextNodeData = newTextNode.getData();
-								newTextNodeData.height += 10;
-								// 更新textNode的高度
-								newTextNode.setData(newTextNodeData);
-								return;
-							}
-
-							// 返回的token
-							const token = JSON.parse(message).choices[0].delta.content;
-							console.log(token);
-							text += (token);
-							newTextNode.setText(text);
-
-							// 获取newTextNode的Data
-							let newTextNodeData = newTextNode.getData();
-							// 获取newTextNode的高度
-							let oldHeight = newTextNodeData.height;
-							// 获取文本高度（包括不可见高度）
-							let height = newTextNode.contentEl.firstChild.firstChild.scrollHeight;
-							if (oldHeight < height) {
-								newTextNodeData.height = height;
-								// 更新textNode的高度
-								newTextNode.setData(newTextNodeData);
-							}
-						});
-					});
-				})
-			})
-		);
 
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
