@@ -16,7 +16,7 @@ Obsidian 画板 AI 插件
 
 - [x] 在Canvas中，生成包含AI问答卡片
 - [x] 配置模型的 API key （目前仅支持DeepSeek）
-- [ ] 个性化指令
+- [x] 个性化指令
 - [ ] 创建特殊的Canvas卡片作为自定义指令
 - [ ] 在Canvas中实现多轮对话
 - [ ] 支持更多大语言模型

@@ -16,7 +16,7 @@ Obsidian Canvas AI Plugin
 
 - [x] Generate AI Q&A cards within Canvas
 - [x] Configure the model's API key (currently only supports DeepSeek)
-- [ ] Custom instructions
+- [x] Custom instructions
 - [ ] Create special Canvas cards as custom instructions
 - [ ] Implement multi-turn conversations in Canvas
 - [ ] Support for more LLMs.
