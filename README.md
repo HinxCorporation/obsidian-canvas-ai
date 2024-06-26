@@ -23,6 +23,14 @@ Obsidian Canvas AI Plugin
 - [ ] Explain content and relationships in Canvas
 - [ ] More...
 
+### Supported Large Language Models
+
+| Model     | Supported |
+| -------- | ---------- |
+| Deepseek | ✅         |
+| ChatGPT  | ❌         |
+| ...      | ...        |
+
 ## How to Install
 
 ### 1. Install from the Obsidian Plugin Market (Not yet)
