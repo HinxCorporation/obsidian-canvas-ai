@@ -147,8 +147,8 @@ export default class ChatCanvasExtension {
             console.log('数据流下载完毕');
             return;
           }
-          str = str.split('data: ');
-          onMessage(str && str[str.length - 1]);
+          const strArray = str.split('data: ');
+          onMessage(strArray && strArray[strArray.length - 1]);
         }
       }
 
