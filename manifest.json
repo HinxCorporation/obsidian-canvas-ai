@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-canvas-ai",
 	"name": "Obsidian Canvas Ai",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"minAppVersion": "1.6.5",
 	"description": "Obsidian Canvas AI Plugin.",
 	"author": "Hinx Corporation",

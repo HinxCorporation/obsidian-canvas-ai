@@ -62,12 +62,12 @@ export default class ChatCanvasExtension {
                 newTextNodeData.height += 10;
                 // 更新textNode的高度
                 newTextNode.setData(newTextNodeData);
+                node.canvas.requestSave();
                 return;
               }
 
               // 返回的token
               const token = JSON.parse(message).choices[0].delta.content;
-              console.log(token);
               text += (token);
               newTextNode.setText(text);
 
