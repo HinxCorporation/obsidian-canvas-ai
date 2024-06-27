@@ -43,7 +43,7 @@ export default class ChatCanvasExtension {
 
             // 创建连接线
             const edge = {
-              id: randomUUID.toString().replace("-", "").substring(0, 16),
+              id: randomUUID().replace(/-/g, '').toString().substring(0, 16),
               fromSide: "bottom",
               fromNode: node.id,
               toSide: "top",
