@@ -62,7 +62,11 @@ export class CanvasAiSettingTab extends PluginSettingTab {
         .onChange(async (value) => {
           console.log(text);
           await this.settingsManager.setSetting({ customInstructions: value });
-        }));
+        })
+        .inputEl.setAttribute("style", "margin-top: 12px; width: 100%;  height: 20vh;")
+      )
+      .settingEl.setAttribute("style", "display: grid; grid-template-columns: 1fr;");
+
   }
 }
 
