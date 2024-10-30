@@ -1,6 +1,7 @@
 import CanvasAiPlugin from "main";
 import { randomUUID } from 'crypto';
-import { CanvasNode, Menu, MenuItem } from 'obsidian';
+import { Menu, MenuItem } from 'obsidian';
+import { CanvasNode } from 'obsidian-typings'
 
 interface requestData {
   messages: { content: string; role: string }[];
